@@ -15,11 +15,11 @@ node {
             sh ''' #!/bin/bash
                 echo "Building apache...."
             '''
-            //website = docker.build("jpk912/appointment2-jenkins-apache-aws", "-f nginx/Dockerfile .")
+            website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
        }     
       stage('Test image') {           
             sh '''
-                echo "Tests would go here dfjiaj...."
+                echo "Tests would go here...."
             '''  
         }     
        stage('Push image') {
@@ -28,11 +28,11 @@ node {
                 echo "Pushing Image...."
             '''
 
-           //push to docker-hub
-            // docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-            //     website.push("${env.BUILD_NUMBER}")            
-            //     website.push("latest")        
-            // }   
+           push to docker-hub
+            docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                website.push("${env.BUILD_NUMBER}")            
+                website.push("latest")        
+            }   
             
         }
 }
