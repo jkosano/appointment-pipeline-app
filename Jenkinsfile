@@ -28,7 +28,7 @@ node {
                 echo "Pushing Image...."
             '''
 
-           push to docker-hub
+           //push to docker-hub
             docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
                 website.push("${env.BUILD_NUMBER}")            
                 website.push("latest")        
