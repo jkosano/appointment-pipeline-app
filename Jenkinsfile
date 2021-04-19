@@ -1,22 +1,18 @@
 node {
     
     stage('get user') {
-        // userVar = null
-        // passVar = null
-        // withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
-        //     userVar = username
-        // }
-        // echo "Using docker user: ${userVar}"
-
-    }    
-
-    environment {
         userVar = null
         passVar = null
         withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
             userVar = username
         }
+        registry = '${userVar}/appointment'
+        echo "Using docker user: ${userVar}"
+        echo ${registry}
 
+    }    
+
+    environment {
         dockerImage = ''
         // registry = 'jpk912/appointment'
         registry = '${userVar}/appointment'
