@@ -3,8 +3,8 @@ node {
     environment {
         dockerImage = ''
         registry = 'jpk912/appointment'
-        //DOCKER_USERNAME = credentials('DOCKER_ID')
-        DOCKER_USERNAME = withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: 'pass', usernameVariable: 'user')]) {
+        // DOCKER_USERNAME = credentials('DOCKER_ID')
+        withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', usernameVariable: 'USER')]) {
         }
     }
 
@@ -14,7 +14,7 @@ node {
       }     
       stage('Build image') {    
             sh ''' #!/bin/bash
-                echo "Logged in as $DOCKER_USERNAME"
+                echo "Logged in as $USER"
                 echo "Building apache...."
             '''
             //website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
