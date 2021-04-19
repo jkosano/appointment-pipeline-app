@@ -7,8 +7,7 @@ node {
             userVar = username
         }
         registry = '${userVar}/appointment'
-        echo "Using docker user: ${userVar}"
-        echo $registry
+        echo "Using docker user: ${userVar}/appointment"
 
     }    
 
@@ -17,7 +16,6 @@ node {
         // registry = 'jpk912/appointment'
         registry = '${userVar}/appointment'
         echo "test: ${userVar}/appointment"
-        echo $registry
 
     }
 
