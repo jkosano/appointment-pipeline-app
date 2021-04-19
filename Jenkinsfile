@@ -15,7 +15,7 @@ node {
         dockerImage = ''
         // registry = 'jpk912/appointment'
         registry = '${userVar}/appointment'
-        echo "test: ${userVar}/appointment"
+        echo "Using docker user2: ${userVar}/appointment"
 
     }
 
