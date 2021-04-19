@@ -8,13 +8,23 @@ node {
         }
     }
 
+      stage('print user') {
+            userVar = null
+            passVar = null
+            withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: 'password', usernameVariable: 'username')]) {
+                userVar = username
+                passVar = password
+            }
+            echo "Username: ${userVar}"
+            echo "Password: ${passVar}"
+      }
+
       stage('Clone repository') {               
             
             //checkout scm
       }     
       stage('Build image') {    
             sh ''' #!/bin/bash
-                echo "Logged in as $USER"
                 echo "Building apache...."
             '''
             //website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
