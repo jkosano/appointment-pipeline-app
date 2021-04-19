@@ -4,19 +4,15 @@ node {
         dockerImage = ''
         registry = 'jpk912/appointment'
         // DOCKER_USERNAME = credentials('DOCKER_ID')
-        withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', usernameVariable: 'USER')]) {
         }
     }
 
       stage('print user') {
             userVar = null
-            passVar = null
-            withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: 'password', usernameVariable: 'username')]) {
+            withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', usernameVariable: 'username')]) {
                 userVar = username
-                passVar = password
             }
-            echo "Username: ${userVar}"
-            echo "Password: ${passVar}"
+            echo "Using docker user: ${userVar}"
       }
 
       stage('Clone repository') {               
