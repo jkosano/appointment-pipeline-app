@@ -14,7 +14,7 @@ node {
         // registry = 'jpk912/appointment'
         registry = '${userVar}/appointment'
         sh ''' #!/bin/bash
-            echo "${userVar}/appointment"
+            echo "test: ${userVar}/appointment"
         '''
 
     }
