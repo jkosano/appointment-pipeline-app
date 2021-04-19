@@ -5,6 +5,7 @@ node {
         registry = 'jpk912/appointment'
         //import docker hub credentials
         //REGISTRY_CREDENTIAL = credentials('DOCKER_ID')
+        DOCKER_USERNAME = credentials('DOCKER_ID')
     }
       //def app     
       stage('Clone repository') {               
@@ -13,6 +14,7 @@ node {
       }     
       stage('Build image') {    
             sh ''' #!/bin/bash
+                echo "Logged in as $DOCKER_USERNAME_USR"
                 echo "Building apache...."
             '''
             website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
