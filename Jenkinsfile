@@ -20,10 +20,8 @@ node {
         dockerImage = ''
         // registry = 'jpk912/appointment'
         registry = '${userVar}/appointment'
-        sh ''' #!/bin/bash
-            echo "test: ${userVar}/appointment"
-            echo $registry
-        '''
+        echo "test: ${userVar}/appointment"
+        echo $registry
 
     }
 
