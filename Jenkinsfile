@@ -3,38 +3,36 @@ node {
     environment {
         dockerImage = ''
         registry = 'jpk912/appointment'
-        //import docker hub credentials
-        //REGISTRY_CREDENTIAL = credentials('DOCKER_ID')
         DOCKER_USERNAME = credentials('DOCKER_ID')
     }
-      //def app     
+
       stage('Clone repository') {               
             
-            checkout scm
+            //checkout scm
       }     
       stage('Build image') {    
             sh ''' #!/bin/bash
-                echo "Logged in as $DOCKER_USERNAME_USR"
+                echo "Logged in as $DOCKER_USERNAME"
                 echo "Building apache...."
             '''
-            website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
+            //website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
        }     
-      stage('Test image') {           
-            sh '''
-                echo "Tests would go here...."
-            '''  
-        }     
-       stage('Push image') {
+//       stage('Test image') {           
+//             sh '''
+//                 echo "Tests would go here...."
+//             '''  
+//         }     
+//        stage('Push image') {
 
-            sh ''' #!/bin/bash
-                echo "Pushing Image...."
-            '''
+//             sh ''' #!/bin/bash
+//                 echo "Pushing Image...."
+//             '''
 
-           //push to docker-hub
-            docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-                website.push("${env.BUILD_NUMBER}")            
-                website.push("latest")        
-            }   
+//            //push to docker-hub
+//             docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+//                 website.push("${env.BUILD_NUMBER}")            
+//                 website.push("latest")        
+//             }   
             
-        }
-}
+//         }
+// }
