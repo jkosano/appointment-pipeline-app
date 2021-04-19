@@ -4,7 +4,6 @@ node {
         dockerImage = ''
         registry = 'jpk912/appointment'
         // DOCKER_USERNAME = credentials('DOCKER_ID')
-        }
     }
 
       stage('print user') {
