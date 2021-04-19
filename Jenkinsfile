@@ -3,7 +3,9 @@ node {
     environment {
         dockerImage = ''
         registry = 'jpk912/appointment'
-        DOCKER_USERNAME = credentials('DOCKER_ID')
+        //DOCKER_USERNAME = credentials('DOCKER_ID')
+        DOCKER_USERNAME = withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: 'pass', usernameVariable: 'user')]) {
+        }
     }
 
       stage('Clone repository') {               
