@@ -27,33 +27,43 @@ pipeline {
             }    
             
             stage('Build apache image') {    
+                steps {
                     sh '''
                         docker build -f sql/Dockerfile -t jpk912/appointment-apache
-                    '''
+                     '''
+                }
             }   
 
-            stage('Build sql image') {    
+            stage('Build sql image') { 
+                steps {   
                     sh '''
                         docker build -f sql/Dockerfile -t jpk912/appointment-sql
                     '''
+                }
             }   
 
-            stage('Test image') {           
+            stage('Test image') {   
+                steps {        
                     sh '''
                         echo "Tests would go here...."
-                    '''  
+                    '''
+                }  
             }     
             
             stage('Push apache image to DockerHub') {
-                sh ''' #!/bin/bash
-                    docker push jpk912/appointment-apache:${env.BUILD_NUMBER}
-                '''
+                steps {
+                    sh ''' #!/bin/bash
+                        docker push jpk912/appointment-apache:${env.BUILD_NUMBER}
+                    '''
+                }
             }
 
             stage('Push sql image to DockerHub') {
-                sh ''' #!/bin/bash
-                    docker push jpk912/appointment-sql:${env.BUILD_NUMBER}
-                '''
+                steps {
+                    sh ''' #!/bin/bash
+                        docker push jpk912/appointment-sql:${env.BUILD_NUMBER}
+                    '''
+                }
                 // //push to docker-hub
                 // docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
                 //     sqlimage.push("${env.BUILD_NUMBER}")            
