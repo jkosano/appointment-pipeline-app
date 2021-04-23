@@ -1,6 +1,5 @@
 node {
 
-    stages {
 
         // stage('get user') {
         //     userVar = null
@@ -121,7 +120,6 @@ node {
     //         '''
     //     }
 
-    }
     
 
     
