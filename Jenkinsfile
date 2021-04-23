@@ -25,6 +25,7 @@ pipeline {
             stage('Clone repository') {
                 steps {
                     sh '''
+                    rm -rf /var/jenkins_home/workspace/*
                     git clone https://github.com/jkosano/appointment-pipeline-app
                     '''
                 }
