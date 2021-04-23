@@ -1,4 +1,4 @@
-pipeline {
+node {
 
 
         // stage('get user') {
@@ -25,15 +25,13 @@ pipeline {
         }    
         
         stage('Build apache image') {    
-                sh '''
-                    docker build -f sql/Dockerfile -t jpk912/appointment-apache
-                '''
+
+                website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
         }   
 
         stage('Build sql image') {    
-                sh '''
-                    docker build -f sql/Dockerfile -t jpk912/appointment-sql
-                '''
+
+                sqlimage = docker.build("jpk912/appointment-sql", "-f sql/Dockerfile .")
         }   
 
         stage('Test image') {           
@@ -43,20 +41,25 @@ pipeline {
         }     
         
         stage('Push apache image to DockerHub') {
-            sh ''' #!/bin/bash
-                docker push jpk912/appointment-apache:${env.BUILD_NUMBER}
-            '''
+            // sh ''' #!/bin/bash
+            //     docker push jpk912/appointment-apache:${env.BUILD_NUMBER}
+            // '''
+            //push to docker-hub
+            docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                website.push("${env.BUILD_NUMBER}")            
+                website.push("latest")        
+            }    
         }
 
         stage('Push sql image to DockerHub') {
-            sh ''' #!/bin/bash
-                docker push jpk912/appointment-sql:${env.BUILD_NUMBER}
-            '''
+            // sh ''' #!/bin/bash
+            //     docker push jpk912/appointment-sql:${env.BUILD_NUMBER}
+            // '''
             // //push to docker-hub
-            // docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-            //     sqlimage.push("${env.BUILD_NUMBER}")            
-            //     sqlimage.push("latest")        
-            // }    
+            docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                sqlimage.push("${env.BUILD_NUMBER}")            
+                sqlimage.push("latest")        
+            }    
         }
 
         //testing to see if i can get dynamic variable for push repo
