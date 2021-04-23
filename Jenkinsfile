@@ -1,6 +1,5 @@
 node {
 
-    agent any
     stages {
 
         // stage('get user') {
