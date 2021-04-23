@@ -25,7 +25,7 @@ pipeline {
             stage('Clone repository') {
                 steps {
                     sh '''
-                    git clone github
+                    git clone https://github.com/jkosano/appointment-pipeline-app
                     '''
                 }
 
