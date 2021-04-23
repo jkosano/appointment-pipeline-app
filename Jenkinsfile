@@ -34,7 +34,7 @@ pipeline {
             stage('Build apache image') {    
                 steps {
                     sh '''
-                        docker build -t jpk912/appointment-apache -f sql/Dockerfile
+                        docker build . -t jpk912/appointment-apache -f sql/Dockerfile
                      '''
                 }
             }   
@@ -42,7 +42,7 @@ pipeline {
             stage('Build sql image') { 
                 steps {   
                     sh '''
-                        docker build -t jpk912/appointment-sql -f sql/Dockerfile
+                        docker build . -t jpk912/appointment-sql -f sql/Dockerfile
                     '''
                 }
             }   
