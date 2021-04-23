@@ -24,7 +24,9 @@ pipeline {
         stages {
             stage('Clone repository') {
                 steps {
+                    sh '''
                     git clone github
+                    '''
                 }
 
             }    
