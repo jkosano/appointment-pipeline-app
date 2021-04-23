@@ -1,49 +1,129 @@
-node {
-    
-    stage('get user') {
-        userVar = null
-        passVar = null
-        withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
-            userVar = username
+pipeline {
+
+    agent any
+    stages {
+
+        // stage('get user') {
+        //     userVar = null
+        //     passVar = null
+        //     withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
+        //         userVar = username
+        //     }
+        //     registry = '${userVar}/appointment'
+        //     echo "Using docker user: ${userVar}/appointment"
+
+        // }    
+
+        environment {
+            dockerImage = ''
+            registry = 'jpk912/appointment'
+            // registry = '${userVar}/appointment'
+            // echo "Using docker user2: ${userVar}/appointment"
+
         }
-        registry = '${userVar}/appointment'
-        echo "Using docker user: ${userVar}/appointment"
 
-    }    
+        stage('Clone repository') {
+               checkout scm
+        }    
+        
+        stage('Build apache image') {    
+                // sh ''' #!/bin/bash
+                //     echo "Building apache...."
+                //     cd apache
+                //     docker build -t jpk912/appointment-apache
+                // '''
+                website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
+        }   
 
-    environment {
-        dockerImage = ''
-        // registry = 'jpk912/appointment'
-        registry = '${userVar}/appointment'
-        echo "Using docker user2: ${userVar}/appointment"
+        stage('Build sql image') {    
+                // sh ''' #!/bin/bash
+                //     echo "Building sql...."
+                //     cd sql
+                //     docker build -t jpk912/appointment-sql
+                // '''
+                sqlimage = docker.build("jpk912/appointment-sql", "-f sql/Dockerfile .")
+        }   
 
-    }
+        stage('Test image') {           
+                sh '''
+                    echo "Tests would go here...."
+                '''  
+        }     
+        
+        stage('Push apache image to DockerHub') {
+            // sh ''' #!/bin/bash
+            //     docker push jpk912/appointment-apache:${env.BUILD_NUMBER}
+            // '''
+            //push to docker-hub
+            docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                website.push("${env.BUILD_NUMBER}")            
+                website.push("latest")        
+            }    
+        }
 
-    // stage('Clone repository') {
-    //         checkout scm
-    // }    
-       
-    // stage('Build image') {    
-    //         sh ''' #!/bin/bash
-    //             echo "Building apache...."
+        stage('Push sql image to DockerHub') {
+            // sh ''' #!/bin/bash
+            //     docker push jpk912/appointment-sql:${env.BUILD_NUMBER}
+            // '''
+            // //push to docker-hub
+            docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                sqlimage.push("${env.BUILD_NUMBER}")            
+                sqlimage.push("latest")        
+            }    
+        }
+
+        //testing to see if i can get dynamic variable for push repo
+        // stage('Push apache image to DockerHub') {
+
+        //     environment {
+        //         userVar = null
+        //         passVar = null
+        //         withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
+        //             userVar = username
+        //         }
+        //         registry = '${userVar}/appointment'
+        //         echo "Using docker user: ${userVar}/appointment"
+        //     }
+
+        //     steps {
+        //         sh ''' #!/bin/bash
+        //             docker push ${userVar}/appointment-apache:${env.BUILD_NUMBER}
+        //         '''
+        //         //push to docker-hub
+        //         docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+        //             website.push("${env.BUILD_NUMBER}")            
+        //             website.push("latest")        
+        //         } 
+        //     }
+
+   
+        // }
+
+
+    //     stage("Verify Docker Images") {
+    //         sh ''' #! /bin/bash
+    //             docker images
     //         '''
-    //         website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
-    // }   
+    //     }
 
-    // stage('Test image') {           
-    //         sh '''
-    //             echo "Tests would go here...."
-    //         '''  
-    // }     
-    
-    // stage('Push image') {
-    //     sh ''' #!/bin/bash
-    //         echo "Pushing Image...."
-    //     '''
-    //     //push to docker-hub
-    //     docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-    //         website.push("${env.BUILD_NUMBER}")            
-    //         website.push("latest")        
-    //     }    
+    //     stage("Start app") {
+    //         sh ''' #! /bin/bash
+    //             echo "Starting application.."
+    //             cd /
+    //             docker-compose up --build
+    //         '''
+    //     }
+
+    //     stage("Stop App") {
+    //         sh ''' #! /bin/bash
+    //             echo "Stopping application.."
+    //             cd /
+    //             docker-compose down
+    //         '''
+    //     }
+
     // }
+    
+
+    
 }
