@@ -23,7 +23,7 @@ node {
         }
 
         stage('Clone repository') {
-               checkout scm
+            checkout scm
         }    
         
         stage('Build apache image') {    
@@ -35,14 +35,14 @@ node {
                 website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
         }   
 
-        stage('Build sql image') {    
-                // sh ''' #!/bin/bash
-                //     echo "Building sql...."
-                //     cd sql
-                //     docker build -t jpk912/appointment-sql
-                // '''
-                sqlimage = docker.build("jpk912/appointment-sql", "-f sql/Dockerfile .")
-        }   
+        // stage('Build sql image') {    
+        //         // sh ''' #!/bin/bash
+        //         //     echo "Building sql...."
+        //         //     cd sql
+        //         //     docker build -t jpk912/appointment-sql
+        //         // '''
+        //         sqlimage = docker.build("jpk912/appointment-sql", "-f sql/Dockerfile .")
+        // }   
 
         stage('Test image') {           
                 sh '''
@@ -61,16 +61,16 @@ node {
             }    
         }
 
-        stage('Push sql image to DockerHub') {
-            // sh ''' #!/bin/bash
-            //     docker push jpk912/appointment-sql:${env.BUILD_NUMBER}
-            // '''
-            // //push to docker-hub
-            docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-                sqlimage.push("${env.BUILD_NUMBER}")            
-                sqlimage.push("latest")        
-            }    
-        }
+        // stage('Push sql image to DockerHub') {
+        //     // sh ''' #!/bin/bash
+        //     //     docker push jpk912/appointment-sql:${env.BUILD_NUMBER}
+        //     // '''
+        //     // //push to docker-hub
+        //     docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+        //         sqlimage.push("${env.BUILD_NUMBER}")            
+        //         sqlimage.push("latest")        
+        //     }    
+        // }
 
         //testing to see if i can get dynamic variable for push repo
         // stage('Push apache image to DockerHub') {
