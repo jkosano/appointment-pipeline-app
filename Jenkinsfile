@@ -23,7 +23,10 @@ pipeline {
 
         stages {
             stage('Clone repository') {
-                git clone github
+                steps {
+                    git clone github
+                }
+
             }    
             
             stage('Build apache image') {    
