@@ -15,13 +15,14 @@ pipeline {
         environment {
             dockerImage = ''
             registry = 'jpk912/appointment'
+            github = 'https://github.com/jkosano/appointment-pipeline-app'
             // registry = '${userVar}/appointment'
             // echo "Using docker user2: ${userVar}/appointment"
 
         }
 
         stage('Clone repository') {
-            checkout scm
+            git clone github
         }    
         
         stage('Build apache image') {    
