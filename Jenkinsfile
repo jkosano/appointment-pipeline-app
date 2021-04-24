@@ -26,7 +26,8 @@ node {
 
         stage('print'){
             sh '''
-                echo "${registry}"
+                echo "environment variable is: ${registry}"
+                printenv 
             '''
         }
         
