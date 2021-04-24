@@ -105,6 +105,12 @@ pipeline {
                     sh ''' #!/bin/bash
                         docker push jpk912/appointment-sql:${env.BUILD_NUMBER}
                     '''
+                    // node {
+                    //     docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                    //         sqlimage.push("${env.BUILD_NUMBER}")            
+                    //         sqlimage.push("latest")        
+                    //     }   
+                    // }
                 }
                 post {
                     success {
@@ -114,11 +120,7 @@ pipeline {
                         echo "Sql failed to push to Dockerhub"
                     }
                 }
-                // //push to docker-hub
-                // docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-                //     sqlimage.push("${env.BUILD_NUMBER}")            
-                //     sqlimage.push("latest")        
-                // }    
+ 
             }
         }
 
