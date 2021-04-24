@@ -25,11 +25,9 @@ pipeline {
         // }    
         
         stage('Build apache image') {    
-            steps {
                 node {
                     website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
                 }
-            }
             post {
                 success {
                     echo "Apache image built successfully!"
