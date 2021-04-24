@@ -1,4 +1,4 @@
-pipeline {
+node {
 
 
         // stage('get user') {
@@ -25,36 +25,16 @@ pipeline {
         // }    
         
         stage('Build apache image') {    
-                node {
-                    website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
-                }
-            post {
-                success {
-                    echo "Apache image built successfully!"
-                }
-                failure {
-                    echo "Apache image failed to build"
-                }
+            steps {
+                website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
             }
+
         }   
 
         stage('Build sql image') {    
-
             steps {
-                node {
-                    sqlimage = docker.build("jpk912/appointment-sql", "-f sql/Dockerfile .")
-                }
+                sqlimage = docker.build("jpk912/appointment-sql", "-f sql/Dockerfile .")
             }
-            post {
-                success {
-                    echo "Sql image built successfully!"
-                }
-                failure {
-                    echo "Sql image failed to build"
-                }
-            }
-
-
         }   
 
         stage('Test image') {           
@@ -69,21 +49,10 @@ pipeline {
             // '''
 
             steps {
-                node {
-                    docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-                        website.push("${env.BUILD_NUMBER}")            
-                        website.push("latest")        
-                    }    
-                }
-            }
-
-            post {
-                success {
-                    echo "Apache image successfully pushed to DockerHub!"
-                }
-                failure {
-                    echo "Apache image failed to push to DockerHub"
-                }
+                docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                    website.push("${env.BUILD_NUMBER}")            
+                    website.push("latest")        
+                }    
             }
         }
 
@@ -93,24 +62,11 @@ pipeline {
             // '''
 
             steps {
-                node {
-                    docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-                        sqlimage.push("${env.BUILD_NUMBER}")            
-                        sqlimage.push("latest")        
-                    }    
-                }
+                docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                    sqlimage.push("${env.BUILD_NUMBER}")            
+                    sqlimage.push("latest")        
+                }    
             }
-
-            post {
-                success {
-                    echo "Apache image successfully pushed to DockerHub!"
-                }
-                failure {
-                    echo "Apache image failed to push to DockerHub"
-                }
-            }
-
-
         }
 
         //testing to see if i can get dynamic variable for push repo
