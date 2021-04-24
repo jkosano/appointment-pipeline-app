@@ -26,7 +26,10 @@ node {
         
         stage('Build apache image') {    
 
-            website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
+            script {
+                website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
+            }
+
             post {
                 success {
                     echo "Apache image successfully built"
