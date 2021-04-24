@@ -20,9 +20,9 @@ pipeline {
 
         }
 
-        stage('Clone repository') {
-            checkout scm
-        }    
+        // stage('Clone repository') {
+        //     checkout scm
+        // }    
         
         stage('Build apache image') {    
             steps {
