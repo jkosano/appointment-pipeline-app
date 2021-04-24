@@ -39,8 +39,17 @@ pipeline {
             stage('Build apache image') {    
                 steps {
                     sh '''
-                        docker build . -t jpk912/appointment-apache -f apache/Dockerfile
+                        website = docker build . -t jpk912/appointment-apache -f apache/Dockerfile
                      '''
+                }
+
+                post {
+                    success {
+                        echo "Apache image built successfully!"
+                    }
+                    failure {
+                        echo "Apache image failed to build"
+                    }
                 }
             }   
 
@@ -50,6 +59,15 @@ pipeline {
                         docker build . -t jpk912/appointment-sql -f sql/Dockerfile
                     '''
                 }
+                post {
+                    success {
+                        echo "Sql image built successfully!"
+                    }
+                    failure {
+                        echo "Sql image failed to build"
+                    }
+                }
+
             }   
 
             stage('Test image') {   
@@ -63,17 +81,38 @@ pipeline {
             stage('Push apache image to DockerHub') {
                 steps {
                     sh ''' #!/bin/bash
-                        docker push jpk912/appointment-apache:1
+                        docker push jpk912/appointment-apache:${env.BUILD_NUMBER}
                     '''
+
+                    script{
+                        docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                            website.push("${env.BUILD_NUMBER}")            
+                            website.push("latest")      
+                    }
+                }
+                post {
+                    success {
+                        echo "Apache pushed to DockerHub"
+                    }
+                    failure {
+                        echo "Apache failed to push to Dockerhub"
+                    }
                 }
             }
 
             stage('Push sql image to DockerHub') {
                 steps {
                     sh ''' #!/bin/bash
-                        echo "test"
                         docker push jpk912/appointment-sql:${env.BUILD_NUMBER}
                     '''
+                }
+                post {
+                    success {
+                        echo "Sql pushed to DockerHub"
+                    }
+                    failure {
+                        echo "Sql failed to push to Dockerhub"
+                    }
                 }
                 // //push to docker-hub
                 // docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
