@@ -22,19 +22,14 @@ node {
 
         stage('Clone repository') {
             checkout scm
-        }    
+        }
         
         stage('Build apache image') {    
-            steps {
-                website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
-            }
-
-        }   
+            website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
+        }
 
         stage('Build sql image') {    
-            steps {
-                sqlimage = docker.build("jpk912/appointment-sql", "-f sql/Dockerfile .")
-            }
+            sqlimage = docker.build("jpk912/appointment-sql", "-f sql/Dockerfile .")
         }   
 
         stage('Test image') {           
@@ -48,12 +43,10 @@ node {
             //     docker push jpk912/appointment-apache:${env.BUILD_NUMBER}
             // '''
 
-            steps {
-                docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-                    website.push("${env.BUILD_NUMBER}")            
-                    website.push("latest")        
-                }    
-            }
+            docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                website.push("${env.BUILD_NUMBER}")            
+                website.push("latest")        
+            }    
         }
 
         stage('Push sql image to DockerHub') {
@@ -61,12 +54,11 @@ node {
             //     docker push jpk912/appointment-sql:${env.BUILD_NUMBER}
             // '''
 
-            steps {
-                docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-                    sqlimage.push("${env.BUILD_NUMBER}")            
-                    sqlimage.push("latest")        
-                }    
-            }
+            docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                sqlimage.push("${env.BUILD_NUMBER}")            
+                sqlimage.push("latest")        
+            }    
+            
         }
 
         //testing to see if i can get dynamic variable for push repo
