@@ -1,5 +1,4 @@
-
-pipeline {
+node {
 
 
         // stage('get user') {
@@ -12,117 +11,88 @@ pipeline {
         //     echo "Using docker user: ${userVar}/appointment"
 
         // }    
-        agent any 
+
         environment {
             dockerImage = ''
             registry = 'jpk912/appointment'
-            github = 'https://github.com/jkosano/appointment-pipeline-app'
             // registry = '${userVar}/appointment'
             // echo "Using docker user2: ${userVar}/appointment"
 
         }
 
-        stages {
+        stage('Clone repository') {
+            checkout scm
+        }    
+        
+        stage('Build apache image') {    
 
-            // declarative pipelines have clone by default
-
-            // stage('Clone repository') {
-            //     steps {
-            //         sh ''' !# /bin/bash
-            //         rm -rf /var/jenkins_home/workspace/mypipeline/*
-            //         git clone https://github.com/jkosano/appointment-pipeline-app
-            //         '''
-            //     }
-
-            // }    
-            
-            stage('Build apache image') {    
-                steps {
-                    sh '''
-                        docker build . -t jpk912/appointment-apache -f apache/Dockerfile
-                     '''
+            website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
+            post {
+                success {
+                    echo "Apache image successfully built"
                 }
-
-                post {
-                    success {
-                        echo "Apache image built successfully!"
-                    }
-                    failure {
-                        echo "Apache image failed to build"
-                    }
-                }
-            }   
-
-            stage('Build sql image') { 
-                steps {   
-                    sh '''
-                        docker build . -t jpk912/appointment-sql -f sql/Dockerfile
-                    '''
-                }
-                post {
-                    success {
-                        echo "Sql image built successfully!"
-                    }
-                    failure {
-                        echo "Sql image failed to build"
-                    }
-                }
-
-            }   
-
-            stage('Test image') {   
-                steps {        
-                    sh '''
-                        echo "Tests would go here...."
-                    '''
-                }  
-            }     
-            
-            stage('Push apache image to DockerHub') {
-                steps {
-                    sh ''' #!/bin/bash
-                        docker push jpk912/appointment-apache:${env.BUILD_NUMBER}
-                    '''
-
-                    // script{
-                    //     docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-                    //         website.push("${env.BUILD_NUMBER}")            
-                    //         website.push("latest")      
-                    // }
-                }
-                post {
-                    success {
-                        echo "Apache pushed to DockerHub"
-                    }
-                    failure {
-                        echo "Apache failed to push to Dockerhub"
-                    }
+                failure {
+                    echo "Apache image failed to build"
                 }
             }
+        }   
 
-            stage('Push sql image to DockerHub') {
-                steps {
-                    sh ''' #!/bin/bash
-                        docker push jpk912/appointment-sql:${env.BUILD_NUMBER}
-                    '''
+        stage('Build sql image') {    
+
+            sqlimage = docker.build("jpk912/appointment-sql", "-f sql/Dockerfile .")
+            post {
+                success {
+                    echo "Sql image successfully built"
                 }
-                post {
-                    success {
-                        echo "Sql pushed to DockerHub"
-                    }
-                    failure {
-                        echo "Sql failed to push to Dockerhub"
-                    }
+                failure {
+                    echo "Sql image failed to build"
                 }
-                // //push to docker-hub
-                // docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-                //     sqlimage.push("${env.BUILD_NUMBER}")            
-                //     sqlimage.push("latest")        
-                // }    
+            }
+        }   
+
+        stage('Test image') {           
+                sh '''
+                    echo "Tests would go here...."
+                '''  
+        }     
+        
+        stage('Push apache image to DockerHub') {
+            // sh ''' #!/bin/bash
+            //     docker push jpk912/appointment-apache:${env.BUILD_NUMBER}
+            // '''
+            //push to docker-hub
+            docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                website.push("${env.BUILD_NUMBER}")            
+                website.push("latest")        
+            }    
+            post {
+                success {
+                    echo "Apache image pushed to DockerHub"
+                }
+                failure {
+                    echo "Apache image failed to push to Dockerhub"
+                }
             }
         }
 
-
+        stage('Push sql image to DockerHub') {
+            // sh ''' #!/bin/bash
+            //     docker push jpk912/appointment-sql:${env.BUILD_NUMBER}
+            // '''
+            // //push to docker-hub
+            docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                sqlimage.push("${env.BUILD_NUMBER}")            
+                sqlimage.push("latest")        
+            }    
+            post {
+                success {
+                    echo "Sql image pushed to DockerHub"
+                }
+                failure {
+                    echo "Sql image failed to push to Dockerhub"
+                }
+            }
+        }
 
         //testing to see if i can get dynamic variable for push repo
         // stage('Push apache image to DockerHub') {
