@@ -39,7 +39,7 @@ pipeline {
             stage('Build apache image') {    
                 steps {
                     sh '''
-                        website = docker build . -t jpk912/appointment-apache -f apache/Dockerfile
+                        docker build . -t jpk912/appointment-apache -f apache/Dockerfile
                      '''
                 }
 
@@ -84,11 +84,11 @@ pipeline {
                         docker push jpk912/appointment-apache:${env.BUILD_NUMBER}
                     '''
 
-                    script{
-                        docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-                            website.push("${env.BUILD_NUMBER}")            
-                            website.push("latest")      
-                    }
+                    // script{
+                    //     docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                    //         website.push("${env.BUILD_NUMBER}")            
+                    //         website.push("latest")      
+                    // }
                 }
                 post {
                     success {
