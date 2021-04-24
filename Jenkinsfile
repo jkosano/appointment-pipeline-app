@@ -39,7 +39,7 @@ pipeline {
             stage('Build apache image') {    
                 steps {
                     sh '''
-                        docker build . -t jpk912/appointment-apache -f sql/Dockerfile
+                        docker build . -t jpk912/appointment-apache -f apache/Dockerfile
                      '''
                 }
             }   
