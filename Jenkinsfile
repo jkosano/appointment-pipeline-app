@@ -63,7 +63,7 @@ pipeline {
             stage('Push apache image to DockerHub') {
                 steps {
                     sh ''' #!/bin/bash
-                        docker push jpk912/appointment-apache:${env.BUILD_NUMBER}
+                        docker push jpk912/appointment-apache:1
                     '''
                 }
             }
@@ -71,6 +71,7 @@ pipeline {
             stage('Push sql image to DockerHub') {
                 steps {
                     sh ''' #!/bin/bash
+                        echo "test"
                         docker push jpk912/appointment-sql:${env.BUILD_NUMBER}
                     '''
                 }
