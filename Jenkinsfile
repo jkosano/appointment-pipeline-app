@@ -30,27 +30,12 @@ node {
                 website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
             }
 
-            post {
-                success {
-                    echo "Apache image successfully built"
-                }
-                failure {
-                    echo "Apache image failed to build"
-                }
-            }
         }   
 
         stage('Build sql image') {    
 
             sqlimage = docker.build("jpk912/appointment-sql", "-f sql/Dockerfile .")
-            post {
-                success {
-                    echo "Sql image successfully built"
-                }
-                failure {
-                    echo "Sql image failed to build"
-                }
-            }
+
         }   
 
         stage('Test image') {           
@@ -68,14 +53,7 @@ node {
                 website.push("${env.BUILD_NUMBER}")            
                 website.push("latest")        
             }    
-            post {
-                success {
-                    echo "Apache image pushed to DockerHub"
-                }
-                failure {
-                    echo "Apache image failed to push to Dockerhub"
-                }
-            }
+
         }
 
         stage('Push sql image to DockerHub') {
@@ -87,14 +65,7 @@ node {
                 sqlimage.push("${env.BUILD_NUMBER}")            
                 sqlimage.push("latest")        
             }    
-            post {
-                success {
-                    echo "Sql image pushed to DockerHub"
-                }
-                failure {
-                    echo "Sql image failed to push to Dockerhub"
-                }
-            }
+
         }
 
         //testing to see if i can get dynamic variable for push repo
