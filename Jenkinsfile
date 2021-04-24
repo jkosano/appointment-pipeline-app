@@ -26,7 +26,7 @@ node {
 
         stage('print'){
             sh '''
-                echo "${env.registry}"
+                echo "${registry}"
             '''
         }
         
