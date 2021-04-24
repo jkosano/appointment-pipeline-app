@@ -1,3 +1,4 @@
+
 pipeline {
 
 
@@ -22,15 +23,18 @@ pipeline {
         }
 
         stages {
-            stage('Clone repository') {
-                steps {
-                    sh ''' !# /bin/bash
-                    rm -rf /var/jenkins_home/workspace/mypipeline/*
-                    git clone https://github.com/jkosano/appointment-pipeline-app
-                    '''
-                }
 
-            }    
+            // declarative pipelines have clone by default
+
+            // stage('Clone repository') {
+            //     steps {
+            //         sh ''' !# /bin/bash
+            //         rm -rf /var/jenkins_home/workspace/mypipeline/*
+            //         git clone https://github.com/jkosano/appointment-pipeline-app
+            //         '''
+            //     }
+
+            // }    
             
             stage('Build apache image') {    
                 steps {
