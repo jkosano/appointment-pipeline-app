@@ -32,12 +32,11 @@ node {
         }
         
         stage('Build apache image') {    
-            // website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
-            website = docker.build("${registry}-apache", "-f apache/Dockerfile .")
+            website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
         }
 
         stage('Build sql image') {    
-            sqlimage = docker.build("${registry}-sql", "-f sql/Dockerfile .")
+            sqlimage = docker.build("jpk912/appointment-sql", "-f sql/Dockerfile .")
         }   
 
         stage('Test image') {           
