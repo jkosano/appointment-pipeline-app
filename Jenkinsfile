@@ -23,44 +23,50 @@ node {
         stage('Clone repository') {
             checkout scm
         }
-        
-        stage('Build apache image') {    
-            // website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
-            website = docker.build("${registry}-apache", "-f apache/Dockerfile .")
+
+        stage('print'){
+            sh '''
+                echo ${registry}
+            '''
         }
-
-        stage('Build sql image') {    
-            sqlimage = docker.build("${registry}-sql", "-f sql/Dockerfile .")
-        }   
-
-        stage('Test image') {           
-                sh '''
-                    echo "Tests would go here...."
-                '''  
-        }     
         
-        stage('Push apache image to DockerHub') {
-            // sh ''' #!/bin/bash
-            //     docker push jpk912/appointment-apache:${env.BUILD_NUMBER}
-            // '''
+        // stage('Build apache image') {    
+        //     // website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
+        //     website = docker.build("${registry}-apache", "-f apache/Dockerfile .")
+        // }
 
-            docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-                website.push("${env.BUILD_NUMBER}")            
-                website.push("latest")        
-            }    
-        }
+        // stage('Build sql image') {    
+        //     sqlimage = docker.build("${registry}-sql", "-f sql/Dockerfile .")
+        // }   
 
-        stage('Push sql image to DockerHub') {
-            // sh ''' #!/bin/bash
-            //     docker push jpk912/appointment-sql:${env.BUILD_NUMBER}
-            // '''
+        // stage('Test image') {           
+        //         sh '''
+        //             echo "Tests would go here...."
+        //         '''  
+        // }     
+        
+        // stage('Push apache image to DockerHub') {
+        //     // sh ''' #!/bin/bash
+        //     //     docker push jpk912/appointment-apache:${env.BUILD_NUMBER}
+        //     // '''
 
-            docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-                sqlimage.push("${env.BUILD_NUMBER}")            
-                sqlimage.push("latest")        
-            }    
+        //     docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+        //         website.push("${env.BUILD_NUMBER}")            
+        //         website.push("latest")        
+        //     }    
+        // }
+
+        // stage('Push sql image to DockerHub') {
+        //     // sh ''' #!/bin/bash
+        //     //     docker push jpk912/appointment-sql:${env.BUILD_NUMBER}
+        //     // '''
+
+        //     docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+        //         sqlimage.push("${env.BUILD_NUMBER}")            
+        //         sqlimage.push("latest")        
+        //     }    
             
-        }
+        // }
 
         //testing to see if i can get dynamic variable for push repo
         // stage('Push apache image to DockerHub') {
