@@ -1,6 +1,6 @@
 FROM mysql
 # ENV MYSQL_ROOT_PASSWORD MYSQL_ROOT_PASSWORD
-ENV MYSQL_DATABASE appointment
+ENV MYSQL_DATABASE appointment-flask
 
 #create db
 # RUN mkdir /usr/sql
