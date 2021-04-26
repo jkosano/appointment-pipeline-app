@@ -68,6 +68,7 @@ node {
             
         }
 
+
         //testing to see if i can get dynamic variable for push repo
         // stage('Push apache image to DockerHub') {
 
