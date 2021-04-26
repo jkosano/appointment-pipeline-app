@@ -8,7 +8,7 @@ RUN docker-php-ext-install mysqli
 RUN docker-php-ext-enable mysqli
 COPY . /var/www/html/
 RUN chmod -R 755 /var/www/html/
-COPY ./apache2.conf ./etc/apache2/
+COPY ./apache/apache2.conf ./etc/apache2/
 
 EXPOSE 80
 
