@@ -22,4 +22,4 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 CMD ["start-apache"]
 
 #EXPOSE 80
-#EXPOSE 8000
+EXPOSE 8000
