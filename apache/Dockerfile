@@ -7,8 +7,8 @@
 
  #start apache changes default port 80 (useful on cloud). Not recommended to use port 80 on cloud services.
  #enable the a2enmod plugin
- COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
- COPY start-apache /usr/local/bin
+ COPY ./apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+ COPY ./apache/start-apache /usr/local/bin
  RUN a2enmod rewrite
 
  #
