@@ -31,12 +31,24 @@ node {
             '''
         }
         
-        stage('Build apache image') {    
-            website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
+        stage('Build apache image') {  
+            steps {
+                echo "Workspace is $WORKSPACE"
+                dir("$WORKSPACE/apache")
+                script {
+                    website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
+                }
+            }  
         }
 
-        stage('Build sql image') {    
-            sqlimage = docker.build("jpk912/appointment-sql", "-f sql/Dockerfile .")
+        stage('Build sql image') {   
+            steps {
+                echo "Workspace is $WORKSPACE"
+                dir("$WORKSPACE/sql") //change dir to /sql?
+                script {
+                    sqlimage = docker.build("jpk912/appointment-sql", "-f sql/Dockerfile .")
+                }
+            }   
         }   
 
         stage('Test image') {           
@@ -49,22 +61,33 @@ node {
             // sh ''' #!/bin/bash
             //     docker push jpk912/appointment-apache:${env.BUILD_NUMBER}
             // '''
-
-            docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-                website.push("${env.BUILD_NUMBER}")            
-                website.push("latest")        
-            }    
+            steps {
+                echo "Workspace is $WORKSPACE"
+                dir("$WORKSPACE/apache") //change dir to /sql?
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                        //website.push("${env.BUILD_NUMBER}")            
+                        website.push("latest")        
+                    }    
+                }
+            }
         }
 
         stage('Push sql image to DockerHub') {
             // sh ''' #!/bin/bash
             //     docker push jpk912/appointment-sql:${env.BUILD_NUMBER}
             // '''
+            steps {
+                echo "Workspace is $WORKSPACE"
+                dir("$WORKSPACE/sql") //change dir to /sql?
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                        //sqlimage.push("${env.BUILD_NUMBER}")            
+                        sqlimage.push("latest")        
+                    }    
+                }
+            }
 
-            docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-                sqlimage.push("${env.BUILD_NUMBER}")            
-                sqlimage.push("latest")        
-            }    
             
         }
 

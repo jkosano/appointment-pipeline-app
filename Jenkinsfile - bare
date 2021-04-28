@@ -74,8 +74,18 @@ pipeline {
                 steps {        
                     sh '''
                         echo "Tests would go here...."
+                        docker-compose up -d
+                        //ping container script goes here
                     '''
                 }  
+                post {
+                    success {
+                        echo "App successfully started"
+                    }
+                    failure {
+                        echo "App failed to start"
+                    }
+                }
             }     
             
             stage('Push apache image to DockerHub') {
@@ -122,6 +132,13 @@ pipeline {
                 }
  
             }
+    //     stage("Stop App") {
+    //         sh ''' #! /bin/bash
+    //             echo "Stopping application.."
+    //             cd /
+    //             docker-compose down
+    //         '''
+    //     }
         }
 
 
