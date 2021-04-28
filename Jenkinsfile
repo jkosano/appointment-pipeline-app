@@ -33,25 +33,17 @@ node {
         
         stage('Build apache image') {  
             echo "Workspace is $WORKSPACE"
-            dir("$WORKSPACE/apache") {
-                // script {
-                //     website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
-                // }
+            // dir("$WORKSPACE/apache") {}
                 script {
-                    website = docker.build("jpk912/appointment-apache")
+                    website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
                 }
-            }
-
         }
 
         stage('Build sql image') {   
             echo "Workspace is $WORKSPACE"
-            dir("$WORKSPACE/sql") {
-                script {
-                    sqlimage = docker.build("jpk912/appointment-sql")
-                }
+            script {
+                sqlimage = docker.build("jpk912/appointment-sql", "-f sql/Dockerfile .")
             }
-
         }   
 
         stage('Test image') {           
@@ -65,13 +57,11 @@ node {
             //     docker push jpk912/appointment-apache:${env.BUILD_NUMBER}
             // '''
             echo "Workspace is $WORKSPACE"
-            dir("$WORKSPACE/apache") {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-                        //website.push("${env.BUILD_NUMBER}")            
-                        website.push("latest")        
-                    }    
-                }
+            script {
+                docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                    //website.push("${env.BUILD_NUMBER}")            
+                    website.push("latest")        
+                }    
             }
 
         }
@@ -81,13 +71,11 @@ node {
             //     docker push jpk912/appointment-sql:${env.BUILD_NUMBER}
             // '''
             echo "Workspace is $WORKSPACE"
-            dir("$WORKSPACE/sql") {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-                        //sqlimage.push("${env.BUILD_NUMBER}")            
-                        sqlimage.push("latest")        
-                    }    
-                }
+            script {
+                docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
+                    //sqlimage.push("${env.BUILD_NUMBER}")            
+                    sqlimage.push("latest")        
+                }    
             }
 
 
