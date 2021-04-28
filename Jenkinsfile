@@ -38,7 +38,7 @@ node {
                 //     website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
                 // }
                 script {
-                    website = docker.build("jpk912/appointment-apache .")
+                    website = docker.build("jpk912/appointment-apache")
                 }
             }
 
@@ -48,7 +48,7 @@ node {
             echo "Workspace is $WORKSPACE"
             dir("$WORKSPACE/sql") {
                 script {
-                    sqlimage = docker.build("jpk912/appointment-sql .")
+                    sqlimage = docker.build("jpk912/appointment-sql")
                 }
             }
 
