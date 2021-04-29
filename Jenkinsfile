@@ -24,11 +24,10 @@ node {
             sh '''
                 projectName = 'appointment'
                 dockerUser = 'jpk912'
-                echo "Uservar: ${userVar}"
-                echo "Uservar2: $userVar"
-                echo "dockerUser: ${dockerUser}"
-                echo "dockerUser2: $dockerUser"
-                echo "Project Name: ${projectName}"
+                echo "dockerUser: $dockerUser"
+                echo "Project Name: $projectName"
+                echo "Uservar: $userVar"
+
             '''
 
         }  
