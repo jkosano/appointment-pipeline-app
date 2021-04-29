@@ -6,21 +6,24 @@ node {
             // registry = '${userVar}/appointment'
             // echo "Using docker user2: ${userVar}/appointment"
             
-            dockerUsername = 'jpk912'
-            projectName = 'appointment'
+            // dockerUsername = 'jpk912'
+            // projectName = 'appointment'
 
-        }
-
-        stage('Get docker username') {
             userVar = null
             passVar = null
             withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
                 userVar = username
             }
+
+        }
+
+        stage('Get docker username') {
+
             registry = '${userVar}/appointment'
+            projectName = 'appointment'
 
             sh '''
-                echo "Username: ${dockerUsername}
+                echo "Username: ${userVar}
                 echo "Project Name: ${projectName}
             '''
 
