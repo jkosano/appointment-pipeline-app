@@ -25,7 +25,7 @@ node {
                 echo "dockerUser: $dockerUser"
                 echo "Project Name: $projectName"
                 echo "Uservar: $userVar"
-                echo "Registry: $registry"
+                echo "Registry env var: ${registry}"
 
             '''
 
