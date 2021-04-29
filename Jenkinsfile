@@ -14,17 +14,8 @@ node {
             withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
                 userVar = username
             }
-            registry = "${userVar}/appointment"
+            def registry = "${userVar}/appointment"
         }
-
-        stage('Get docker username') {
-
-            sh '''
-                projectName="appointment"
-                dockerUser="jpk912"
-            '''
-
-        }  
 
         stage('Clone repository') {
             checkout scm
@@ -32,6 +23,9 @@ node {
         
         stage('Build apache image') {  
             echo "Workspace is $WORKSPACE"
+            echo "REGISTRY is: $REGISTRY"
+            echo "Registry is: $registry"
+            echo "Registry2 is: ${registry}"
             def dockerUser = "jpk912"
             def projectName = "appointment"
             // dir("$WORKSPACE/apache") {} <--this is a dir block. A prebuilt jenkins equivalent for changing directory
@@ -44,7 +38,7 @@ node {
         stage('Build sql image') {   
             echo "Workspace is $WORKSPACE"
             script {
-                sqlimage = docker.build("jpk912/appointment-sql", "-f sql/Dockerfile .")
+                sqlimage = docker.build("$dockerUser" + "/" + "$projectName-apache", "-f sql/Dockerfile .")
             }
         }   
 
