@@ -1,17 +1,5 @@
 node {
 
-
-        // stage('get user') {
-        //     userVar = null
-        //     passVar = null
-        //     withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
-        //         userVar = username
-        //     }
-        //     registry = '${userVar}/appointment'
-        //     echo "Using docker user: ${userVar}/appointment"
-
-        // }    
-
         environment {
             dockerImage = ''
             //registry = 'jpk912/appointment'
@@ -20,20 +8,29 @@ node {
 
         }
 
+        stage('Get docker username') {
+            userVar = null
+            passVar = null
+            withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
+                userVar = username
+            }
+            registry = '${userVar}/appointment'
+
+            sh '''
+                echo "Using docker user: ${userVar}/appointment"
+                echo "Registry variable is: ${registry}
+                echo "uservar is: $userVar
+            '''
+
+        }  
+
         stage('Clone repository') {
             checkout scm
-        }
-
-        stage('print'){
-            sh '''
-                echo "environment variable is: ${registry}"
-
-            '''
         }
         
         stage('Build apache image') {  
             echo "Workspace is $WORKSPACE"
-            // dir("$WORKSPACE/apache") {}
+            // dir("$WORKSPACE/apache") {} <--this is a dir block. A prebuilt jenkins equivalent for changing directory
                 script {
                     website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
                 }
@@ -77,38 +74,36 @@ node {
                     sqlimage.push("latest")        
                 }    
             }
+        }
 
+        stage('Run Trivy'){
+            sh '''
+                echo "Dollar sign website: $website"
+                echo "Dollar sign sqlimage: $sqlimage"
+                echo "Using docker user: ${userVar}/appointment"
+                echo "Registry variable is: ${registry}
+                echo "uservar is: $userVar                
 
-        
+            '''
+            // trivy jpk912/$website
+            // trivy jpk912/$sqlimage
+
+        }
+
+        stage('Run Anchore'){
+            sh '''
+                echo "anchore goes here"
+
+            '''
+            // anchore name: 'anchor_images'
+
+            //below goes in sh script
+            // echo $website > anchor_images
+            // echo $sqlimage > anchor_images
         }
 
 
-        //testing to see if i can get dynamic variable for push repo
-        // stage('Push apache image to DockerHub') {
 
-        //     environment {
-        //         userVar = null
-        //         passVar = null
-        //         withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
-        //             userVar = username
-        //         }
-        //         registry = '${userVar}/appointment'
-        //         echo "Using docker user: ${userVar}/appointment"
-        //     }
-
-        //     steps {
-        //         sh ''' #!/bin/bash
-        //             docker push ${userVar}/appointment-apache:${env.BUILD_NUMBER}
-        //         '''
-        //         //push to docker-hub
-        //         docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
-        //             website.push("${env.BUILD_NUMBER}")            
-        //             website.push("latest")        
-        //         } 
-        //     }
-
-   
-        // }
 
 
     //     stage("Verify Docker Images") {
