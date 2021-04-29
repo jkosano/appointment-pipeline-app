@@ -23,9 +23,6 @@ node {
         
         stage('Build apache image') {  
             echo "Workspace is $WORKSPACE"
-            echo "REGISTRY is: $REGISTRY"
-            echo "Registry is: $registry"
-            echo "Registry2 is: ${registry}"
             def dockerUser = "jpk912"
             def projectName = "appointment"
             // dir("$WORKSPACE/apache") {} <--this is a dir block. A prebuilt jenkins equivalent for changing directory
