@@ -22,11 +22,6 @@ node {
             sh '''
                 projectName="appointment"
                 dockerUser="jpk912"
-                echo "dockerUser: $dockerUser"
-                echo "Project Name: $projectName"
-                echo "Uservar: ${userVar}"
-                echo "Registry env var: ${registry}"
-
             '''
 
         }  
@@ -37,6 +32,7 @@ node {
         
         stage('Build apache image') {  
             echo "Workspace is $WORKSPACE"
+            echo "dockerUser at build stage: $dockerUser"
             // dir("$WORKSPACE/apache") {} <--this is a dir block. A prebuilt jenkins equivalent for changing directory
                 script {
                     website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
