@@ -14,16 +14,16 @@ node {
             withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
                 userVar = username
             }
+            
 
         }
 
         stage('Get docker username') {
 
-            registry = '${userVar}/appointment'
-            projectName = 'appointment'
-            dockerUser = 'jpk912'
-
             sh '''
+                registry = '${userVar}/appointment'
+                projectName = 'appointment'
+                dockerUser = 'jpk912'
                 echo "Uservar: ${userVar}"
                 echo "Uservar2: $userVar"
                 echo "dockerUser: ${dockerUser}"
