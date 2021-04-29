@@ -19,9 +19,9 @@ node {
         }
 
         stage('Get docker username') {
+                registry = '${userVar}/appointment'
 
             sh '''
-                registry = '${userVar}/appointment'
                 projectName = 'appointment'
                 dockerUser = 'jpk912'
                 echo "Uservar: ${userVar}"
