@@ -19,12 +19,12 @@ node {
             // dockerUsername = 'jpk912'
             // projectName = 'appointment'
 
-            userVar = null
-            passVar = null
-            withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
-                userVar = username
-            }
-            def registry = "${userVar}/appointment"
+            // userVar = null
+            // passVar = null
+            // withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
+            //     userVar = username
+            // }
+            // def registry = "${userVar}/appointment"
         }
 
         stage('Clone repository') {
