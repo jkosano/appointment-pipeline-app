@@ -25,17 +25,18 @@ node {
             echo "Workspace is $WORKSPACE"
             def dockerUser = "jpk912"
             def projectName = "appointment"
-            // dir("$WORKSPACE/apache") {} <--this is a dir block. A prebuilt jenkins equivalent for changing directory
-                script {
-                    // website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
-                    website = docker.build("$dockerUser" + "/" + "$projectName-apache", "-f apache/Dockerfile .")
-                }
-                sh '''
+            sh '''
                     echo "DockerUser: $dockerUser"
                     echo "ProjectName: $projectName"
                     echo "DockerUser2: ${dockerUser}"
                     echo "ProjectName2: ${projectName}"
                 '''
+            // dir("$WORKSPACE/apache") {} <--this is a dir block. A prebuilt jenkins equivalent for changing directory
+                script {
+                    // website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
+                    website = docker.build("$dockerUser" + "/" + "$projectName-apache", "-f apache/Dockerfile .")
+                }
+
         }
 
         // stage('Build sql image') {   
