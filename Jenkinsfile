@@ -1,20 +1,18 @@
 node {
         def projectName = "appointment"
 
+        //get docker username from credentials for docker push
         dockerUser = null
         passVar = null
         withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
             dockerUser = username
         }
+        
         //def registry = "${userVar}/appointment"
 
 
         environment {
             dockerImage = ''
-
-            
-            // dockerUsername = 'jpk912'
-            // projectName = 'appointment'
 
         }
 
@@ -30,12 +28,6 @@ node {
             // dir("$WORKSPACE/apache") {} <--this is a dir block. A prebuilt jenkins equivalent for changing directory
                 script {
                     // website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
-                // sh '''
-                //     echo "DockerUser: $dockerUser"
-                //     echo "ProjectName: $projectName"
-                //     echo "DockerUser2: ${dockerUser}"
-                //     echo "ProjectName2: ${projectName}"
-                // '''
                     sh "echo Your docker username is: ${dockerUser}"
                     website = docker.build("$dockerUser" + "/" + "$projectName-apache", "-f apache/Dockerfile .")
                 }
@@ -56,9 +48,6 @@ node {
         }     
         
         stage('Push apache image to DockerHub') {
-            // sh ''' #!/bin/bash
-            //     docker push jpk912/appointment-apache:${env.BUILD_NUMBER}
-            // '''
             echo "Workspace is $WORKSPACE"
             script {
                 docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_ID') {            
@@ -84,28 +73,28 @@ node {
 
 
 
-        // stage ('Container Scanning'{
-        //     parallel {
-        //         stage('Run Trivy'){
-        //             sh '''
-        //                 trivy jpk912/$website
-        //                 trivy jpk912/$sqlimage
-        //             '''
-        //         }
+        stage ('Container Scanning'{
+            parallel {
+                stage('Run Trivy'){
+                    sh '''
+                        trivy jpk912/$website
+                        trivy jpk912/$sqlimage
+                    '''
+                }
 
-        //         stage('Run Anchore'){
-        //             sh '''
-        //                 echo "anchore goes here"
-        //                 echo $website > anchor_images
-        //                 echo $sqlimage > anchor_images
+                stage('Run Anchore'){
+                    sh '''
+                        echo "anchore goes here"
+                        echo $website > anchor_images
+                        echo $sqlimage > anchor_images
 
-        //             '''
-        //             // anchore name: 'anchor_images'
+                    '''
+                    // anchore name: 'anchor_images'
 
-        //             //below goes in sh script
-        //         }
-        //     }
-        // }
+                    //below goes in sh script
+                }
+            }
+        }
 
 
 
