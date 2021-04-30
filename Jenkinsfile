@@ -1,30 +1,21 @@
 node {
-        def dockerUser = "jpk912"
         def projectName = "appointment"
 
-        userVar = null
+        dockerUser = null
         passVar = null
         withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
-            userVar = username
+            dockerUser = username
         }
-        def registry = "${userVar}/appointment"
+        //def registry = "${userVar}/appointment"
 
 
         environment {
             dockerImage = ''
-            //registry = 'jpk912/appointment'
-            // registry = '${userVar}/appointment'
-            // echo "Using docker user2: ${userVar}/appointment"
+
             
             // dockerUsername = 'jpk912'
             // projectName = 'appointment'
 
-            // userVar = null
-            // passVar = null
-            // withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
-            //     userVar = username
-            // }
-            // def registry = "${userVar}/appointment"
         }
 
         stage('Clone repository') {
@@ -45,10 +36,7 @@ node {
                 //     echo "DockerUser2: ${dockerUser}"
                 //     echo "ProjectName2: ${projectName}"
                 // '''
-                    sh "echo ${dockerUser}"
-                    sh "echo ${projectName}"
-                    sh "echo ${userVar}"
-                    sh "echo ${registry}"
+                    sh "echo Your docker username is: ${dockerUser}"
                     website = docker.build("$dockerUser" + "/" + "$projectName-apache", "-f apache/Dockerfile .")
                 }
 
