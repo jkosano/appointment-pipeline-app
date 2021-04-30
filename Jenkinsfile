@@ -1,14 +1,16 @@
 
+def projectName = "appointment"
+
+//get docker username from jenkins credentials for docker push
+dockerUser = null
+passVar = null
+withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
+    dockerUser = username
+}
+
 pipeline {
 
-        def projectName = "appointment"
 
-        //get docker username from jenkins credentials for docker push
-        dockerUser = null
-        passVar = null
-        withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
-            dockerUser = username
-        }
 
         agent any 
         environment {
