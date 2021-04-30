@@ -2,6 +2,14 @@ node {
         def dockerUser = "jpk912"
         def projectName = "appointment"
 
+        userVar = null
+        passVar = null
+        withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: '', usernameVariable: 'username')]) {
+            userVar = username
+        }
+        def registry = "${userVar}/appointment"
+
+
         environment {
             dockerImage = ''
             //registry = 'jpk912/appointment'
@@ -39,6 +47,8 @@ node {
                 // '''
                     sh "echo ${dockerUser}"
                     sh "echo ${projectName}"
+                    sh "echo ${userVar}"
+                    sh "echo ${registry}"
                     website = docker.build("$dockerUser" + "/" + "$projectName-apache", "-f apache/Dockerfile .")
                 }
 
