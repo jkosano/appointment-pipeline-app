@@ -25,8 +25,8 @@ node {
         
         stage('Build apache image') {  
             echo "Workspace is $WORKSPACE"
-            def dockerUser = "jpk912"
-            def projectName = "appointment"
+            // def dockerUser = "jpk912"
+            // def projectName = "appointment"
             sh '''
                     echo "DockerUser: $dockerUser"
                     echo "ProjectName: $projectName"
