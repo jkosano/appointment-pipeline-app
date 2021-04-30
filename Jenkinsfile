@@ -31,12 +31,14 @@ node {
             // dir("$WORKSPACE/apache") {} <--this is a dir block. A prebuilt jenkins equivalent for changing directory
                 script {
                     // website = docker.build("jpk912/appointment-apache", "-f apache/Dockerfile .")
-                sh '''
-                    echo "DockerUser: $dockerUser"
-                    echo "ProjectName: $projectName"
-                    echo "DockerUser2: ${dockerUser}"
-                    echo "ProjectName2: ${projectName}"
-                '''
+                // sh '''
+                //     echo "DockerUser: $dockerUser"
+                //     echo "ProjectName: $projectName"
+                //     echo "DockerUser2: ${dockerUser}"
+                //     echo "ProjectName2: ${projectName}"
+                // '''
+                    sh "echo ${dockerUser}"
+                    sh "echo ${projectName}"
                     website = docker.build("$dockerUser" + "/" + "$projectName-apache", "-f apache/Dockerfile .")
                 }
 
