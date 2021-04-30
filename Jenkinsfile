@@ -1,4 +1,6 @@
 node {
+        def dockerUser = "jpk912"
+        def projectName = "appointment"
 
         environment {
             dockerImage = ''
