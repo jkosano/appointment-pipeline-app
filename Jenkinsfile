@@ -10,20 +10,13 @@ withCredentials([usernamePassword(credentialsId: 'DOCKER_ID', passwordVariable: 
 
 pipeline {
 
-
-
         agent any 
         environment {
             dockerImage = ''
-            // registry = 'jpk912/appointment'
-            // github = 'https://github.com/jkosano/appointment-pipeline-app'
-            // registry = '${userVar}/appointment'
-            // echo "Using docker user2: ${userVar}/appointment"
 
         }
 
         stages {
-
             // declarative pipelines have checkout by default
 
             stage ('Build and Push Apache Container')  {
@@ -43,10 +36,10 @@ pipeline {
 
                 post {
                     success {
-                        echo "Apache image built successfully!"
+                        echo "Apache image built and pushed successfully!"
                     }
                     failure {
-                        echo "Apache image failed to build"
+                        echo "Apache image failed to build/push"
                     }
                 }
             }
@@ -68,13 +61,45 @@ pipeline {
 
                 post {
                     success {
-                        echo "SQL image built successfully!"
+                        echo "SQL image built and pushed successfully!"
                     }
                     failure {
-                        echo "SQL image failed to build"
+                        echo "SQL image failed to build/push"
                     }
                 }
             }
+
+            stage ('Container Scanning'{
+                parallel {
+                    stage('Run Trivy'){
+                        sh '''
+                            trivy jpk912/$website
+                            trivy jpk912/$sqlimage
+                        '''
+                    }
+
+                    stage('Run Anchore'){
+                        sh '''
+                            echo "anchore goes here"
+                            echo $website > anchor_images
+                            echo $sqlimage > anchor_images
+
+                        '''
+                        // anchore name: 'anchor_images'
+
+                        //below goes in sh script
+                    }
+                }
+            }
+
+            // stage ('Push image to kubectl') {
+            //     steps {
+            //         sh '''
+            //             kubectl set image deployment/apache \
+            //             apache=jpk912/appointment-apache:latest
+            //         '''
+            //     }
+            // }
             
             // stage('Build apache image') {    
             //     steps {

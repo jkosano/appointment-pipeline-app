@@ -20,8 +20,9 @@
  #use default php.ini configuration
  RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
- EXPOSE 80 
+ #EXPOSE 80 <---original 
+
+ #expose port 8000 for mapping on kubernetes
+ EXPOSE 8000 
  CMD ["start-apache"]
 
- #EXPOSE 80
- #EXPOSE 8000 
